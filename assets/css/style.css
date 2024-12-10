@@ -2229,6 +2229,10 @@ textarea {
   margin-left: 10px;
 }
 
+.template-btn svg {
+  margin-right: 10px;
+}
+
 .template-btn:hover {
   color: var(--color-white);
   -webkit-box-shadow: 0 0 30px 0px rgba(0, 0, 0, 0.3);
