@@ -34,6 +34,27 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, error: 'bad_request' }, 400);
   }
 
+  // Temporary setup check: verifies key and sender domain without sending mail
+  if (data.diag === 'mandrill') {
+    const from = env.MAIL_FROM || 'noreply@racih.com';
+    const call = (path, body = {}) =>
+      fetch('https://mandrillapp.com/api/1.0/' + path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: env.MANDRILL_KEY, ...body }),
+      }).then((r) => r.json()).catch((e) => ({ name: 'fetch', message: String(e) }));
+    const ping = env.MANDRILL_KEY ? await call('users/ping2') : null;
+    const dom = env.MANDRILL_KEY ? await call('senders/check-domain', { domain: from.split('@')[1] }) : null;
+    return json({
+      keyConfigured: Boolean(env.MANDRILL_KEY),
+      keyValid: Boolean(ping && ping.PING),
+      keyError: ping && !ping.PING ? ping.name : undefined,
+      from,
+      toConfigured: Boolean(env.MAIL_TO),
+      domain: dom && { valid_signing: dom.valid_signing, dkim: dom.dkim && dom.dkim.valid, spf: dom.spf && dom.spf.valid, verified: Boolean(dom.verified_at), error: dom.name },
+    });
+  }
+
   // Bots fill the hidden field or submit instantly; answer "ok" so they don't retry
   if (data.website || (Number(data.t) && Date.now() - Number(data.t) < MIN_FILL_MS)) {
     return json({ ok: true });
