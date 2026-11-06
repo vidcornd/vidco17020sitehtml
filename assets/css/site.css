@@ -486,6 +486,8 @@ p { margin: 0; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.5; cursor: pointer; }
 .check input { margin-top: 3px; width: 17px; height: 17px; accent-color: var(--plum); flex: none; }
 .form-error { font-size: 14px; color: #b23434; }
+.form-error a { color: inherit; text-decoration: underline; }
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .demo-form .btn { justify-self: start; margin-top: 4px; }
 .demo-form .btn[disabled] { opacity: .6; pointer-events: none; }
 

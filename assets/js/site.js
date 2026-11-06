@@ -74,27 +74,58 @@
   });
 
   var form = demo.querySelector('.demo-form');
+  var errorBox = form.querySelector('.form-error');
+  var submit = form.querySelector('button[type=submit]');
+  var WA = '<a href="https://wa.me/905325661114" target="_blank" rel="noopener">WhatsApp</a>';
+  var fail = function (html) { errorBox.innerHTML = html; errorBox.hidden = false; };
+  form.elements.t.value = Date.now();
+
+  // Turnstile is switched on by filling data-sitekey in the markup
+  var captcha = form.querySelector('.cf-turnstile');
+  if (captcha.dataset.sitekey) {
+    captcha.hidden = false;
+    var ts = document.createElement('script');
+    ts.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    ts.async = true;
+    document.head.appendChild(ts);
+  }
+
   form.addEventListener('submit', function (e) {
+    e.preventDefault();
     var ok = true;
     form.querySelectorAll('[required]').forEach(function (f) {
       var bad = f.type === 'checkbox' ? !f.checked : !f.value.trim() || (f.type === 'email' && !/^\S+@\S+\.\S+$/.test(f.value));
       (f.type === 'checkbox' ? f.closest('.check') : f).classList.toggle('invalid', bad);
       if (bad) ok = false;
     });
-    form.querySelector('.form-error').hidden = ok;
-    if (!ok) { e.preventDefault(); return; }
-    // The backend has no company field, so company and note travel in the message body
-    form.elements.message.value = 'Firma: ' + document.getElementById('f-company').value.trim() +
-      '\nKaynak: 17020muayene.vidco.com.tr' +
-      (document.getElementById('f-note').value.trim() ? '\n\n' + document.getElementById('f-note').value.trim() : '');
-    form.querySelector('button[type=submit]').disabled = true;
-    track('demo_form_submit');
-    // The POST goes to a hidden iframe, so the visitor stays on the page
-    setTimeout(function () {
-      show('done');
-      form.reset();
-      form.querySelector('button[type=submit]').disabled = false;
-    }, 600);
+    if (!ok) { fail('Lütfen yıldızlı alanları doldurun ve aydınlatma metnini onaylayın.'); return; }
+    errorBox.hidden = true;
+    submit.disabled = true;
+
+    var data = Object.fromEntries(new FormData(form));
+    fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (res) {
+        if (res.ok) {
+          track('demo_form_submit');
+          form.reset();
+          form.elements.t.value = Date.now();
+          show('done');
+        } else if (res.error === 'validation') {
+          fail('Lütfen bilgilerinizi kontrol edip tekrar deneyin.');
+        } else if (res.error === 'captcha') {
+          fail('Doğrulama tamamlanamadı, lütfen tekrar deneyin.');
+        } else {
+          fail('Talebiniz şu an gönderilemedi. Lütfen ' + WA + ' üzerinden yazın ya da +90 (216) 345 67 45 numarasını arayın.');
+        }
+      })
+      .catch(function () {
+        fail('Bağlantı hatası. Lütfen ' + WA + ' üzerinden yazın ya da +90 (216) 345 67 45 numarasını arayın.');
+      })
+      .then(function () {
+        submit.disabled = false;
+        if (window.turnstile && captcha.dataset.sitekey) window.turnstile.reset();
+      });
   });
 
   document.getElementById('year').textContent = new Date().getFullYear();

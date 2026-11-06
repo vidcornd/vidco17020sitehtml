@@ -456,16 +456,16 @@
       <div class="demo-step" data-step="form" hidden>
         <button class="demo-back" type="button" data-goto="choose"><span aria-hidden="true">←</span> Geri</button>
         <h2>Demo talep formu</h2>
-        <form class="demo-form" action="https://vidco.com.tr/form/send/1" method="POST" target="demo-sink" novalidate>
-          <input type="hidden" name="subject" value="Vidco 17020 Demo Talebi">
-          <textarea name="message" hidden></textarea>
+        <form class="demo-form" action="/api/demo" method="POST" novalidate>
+          <input type="hidden" name="t">
+          <div class="hp" aria-hidden="true"><label>Web sitesi <input name="website" tabindex="-1" autocomplete="off"></label></div>
           <div class="field">
             <label for="f-name">Ad Soyad <span>*</span></label>
-            <input id="f-name" name="name-surname" type="text" autocomplete="name" required>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
           </div>
           <div class="field">
             <label for="f-company">Firma <span>*</span></label>
-            <input id="f-company" type="text" autocomplete="organization" required>
+            <input id="f-company" name="company" type="text" autocomplete="organization" required>
           </div>
           <div class="field-row">
             <div class="field">
@@ -479,16 +479,16 @@
           </div>
           <div class="field">
             <label for="f-note">Eklemek istedikleriniz</label>
-            <textarea id="f-note" rows="3" placeholder="Örn. saha personeli sayısı, kullandığınız mevcut yazılım"></textarea>
+            <textarea id="f-note" name="note" rows="3" placeholder="Örn. saha personeli sayısı, kullandığınız mevcut yazılım"></textarea>
           </div>
           <label class="check">
             <input type="checkbox" name="kvkk" required>
             <span><a href="https://vidco.com.tr/kvkk-aydinlatma-metni" target="_blank" rel="noopener">Kişisel Verilerin İşlenmesine İlişkin Aydınlatma Metni</a>'ni okudum, kabul ediyorum.</span>
           </label>
-          <p class="form-error" role="alert" hidden>Lütfen yıldızlı alanları doldurun ve aydınlatma metnini onaylayın.</p>
+          <div class="cf-turnstile" data-sitekey="" data-language="tr" hidden></div>
+          <p class="form-error" role="alert" hidden></p>
           <button class="btn btn-primary" type="submit">Talebi Gönder <span aria-hidden="true">→</span></button>
         </form>
-        <iframe name="demo-sink" title="Form gönderimi" hidden></iframe>
       </div>
 
       <div class="demo-step demo-done" data-step="done" hidden>
