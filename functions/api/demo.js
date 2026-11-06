@@ -2,7 +2,7 @@
 //
 // Cloudflare Pages > Settings > Variables and Secrets:
 //   MANDRILL_KEY      (secret, required)  Mandrill API key
-//   MAIL_FROM         (optional)          verified sender in Mandrill, default noreply@vidco.com.tr
+//   MAIL_FROM         (optional)          verified sender in Mandrill, default noreply@racih.com
 //   MAIL_TO           (optional)          recipients, comma separated, default info@vidco.com.tr
 //   TURNSTILE_SECRET  (secret, optional)  enables Cloudflare Turnstile verification
 
@@ -85,7 +85,7 @@ export async function onRequestPost({ request, env }) {
         key: env.MANDRILL_KEY,
         message: {
           subject: `Vidco 17020 Demo Talebi - ${f.company}`,
-          from_email: env.MAIL_FROM || 'noreply@vidco.com.tr',
+          from_email: env.MAIL_FROM || 'noreply@racih.com',
           from_name: 'Vidco 17020 Web',
           to,
           headers: { 'Reply-To': f.email },
