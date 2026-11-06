@@ -138,6 +138,7 @@ p { margin: 0; }
   background: linear-gradient(transparent 60%, rgba(244,115,42,.24) 60%, rgba(244,115,42,.24) 92%, transparent 92%);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+  white-space: nowrap;
 }
 .accent { color: var(--plum); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
