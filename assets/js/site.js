@@ -142,5 +142,22 @@
       });
   });
 
+  // Certificates open in a lightbox; without <dialog> support the link opens the image
+  var lightbox = document.getElementById('lightbox');
+  if (typeof lightbox.showModal === 'function') {
+    var lbImg = lightbox.querySelector('img');
+    document.querySelectorAll('.cert').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        lbImg.src = a.getAttribute('href');
+        lbImg.alt = a.dataset.cert + ' sertifikası';
+        lightbox.showModal();
+      });
+    });
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox || e.target.closest('[data-close]')) lightbox.close();
+    });
+  }
+
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
