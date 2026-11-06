@@ -98,15 +98,19 @@ export async function onRequestPost({ request, env }) {
       }),
     });
     result = await res.json();
-  } catch {
-    return json({ ok: false, error: 'mail_failed' }, 502);
+  } catch (err) {
+    return json({ ok: false, error: 'mail_failed', detail: 'fetch: ' + String(err).slice(0, 120) }, 502);
   }
 
   // Mandrill returns one entry per recipient, or an error object
   const sent = Array.isArray(result) && result.length && result.every((r) => ['sent', 'queued', 'scheduled'].includes(r.status));
   if (!sent) {
     console.log('mandrill error', JSON.stringify(result));
-    return json({ ok: false, error: 'mail_failed' }, 502);
+    // Mandrill's reason codes (e.g. unsigned, Invalid_Key) hold no secrets and make failures diagnosable
+    const detail = Array.isArray(result)
+      ? result.map((r) => `${r.status}${r.reject_reason ? ':' + r.reject_reason : ''}`).join(',')
+      : `${result && result.name}: ${result && result.message}`.slice(0, 200);
+    return json({ ok: false, error: 'mail_failed', detail }, 502);
   }
   return json({ ok: true });
 }

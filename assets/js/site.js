@@ -116,7 +116,9 @@
         } else if (res.error === 'captcha') {
           fail('Doğrulama tamamlanamadı, lütfen tekrar deneyin.');
         } else {
-          fail('Talebiniz şu an gönderilemedi. Lütfen ' + WA + ' üzerinden yazın ya da +90 (216) 345 67 45 numarasını arayın.');
+          fail('Talebiniz şu an gönderilemedi. Lütfen ' + WA + ' üzerinden yazın ya da +90 (216) 345 67 45 numarasını arayın.' +
+            '<small class="err-code">Hata kodu: ' + String(res.error || 'bilinmiyor').replace(/[<>&]/g, '') +
+            (res.detail ? ' / ' + String(res.detail).replace(/[<>&]/g, '') : '') + '</small>');
         }
       })
       .catch(function () {
