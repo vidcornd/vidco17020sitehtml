@@ -53,6 +53,7 @@
   var track = function (event) { (window.dataLayer = window.dataLayer || []).push({ event: event }); };
   var show = function (step) {
     demo.querySelectorAll('.demo-step').forEach(function (el) { el.hidden = el.dataset.step !== step; });
+    if (step === 'form') loadCaptcha();
     var first = demo.querySelector('[data-step="' + step + '"] input:not([type=hidden]), [data-step="' + step + '"] .demo-option');
     if (first) first.focus();
   };
@@ -80,12 +81,23 @@
   var fail = function (html) { errorBox.innerHTML = html; errorBox.hidden = false; };
   form.elements.t.value = Date.now();
 
-  // Turnstile is switched on by filling data-sitekey in the markup
-  var captcha = form.querySelector('.cf-turnstile');
-  if (captcha.dataset.sitekey) {
-    captcha.hidden = false;
+  // Turnstile is switched on by filling data-sitekey in the markup. It loads when the form
+  // step opens and stays invisible unless Cloudflare wants the visitor to interact.
+  var captcha = form.querySelector('.captcha');
+  var captchaId = null;
+  function loadCaptcha() {
+    if (!captcha.dataset.sitekey || captcha.dataset.loading) return;
+    captcha.dataset.loading = '1';
+    window.onTurnstileLoad = function () {
+      captchaId = window.turnstile.render(captcha, {
+        sitekey: captcha.dataset.sitekey,
+        language: 'tr',
+        appearance: 'interaction-only',
+        action: 'demo',
+      });
+    };
     var ts = document.createElement('script');
-    ts.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    ts.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
     ts.async = true;
     document.head.appendChild(ts);
   }
@@ -126,7 +138,7 @@
       })
       .then(function () {
         submit.disabled = false;
-        if (window.turnstile && captcha.dataset.sitekey) window.turnstile.reset();
+        if (captchaId !== null) window.turnstile.reset(captchaId);
       });
   });
 

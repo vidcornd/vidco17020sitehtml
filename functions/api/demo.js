@@ -85,7 +85,7 @@ export async function onRequestPost({ request, env }) {
       body: JSON.stringify({
         key: env.MANDRILL_KEY,
         message: {
-          subject: `Demo talebi: ${f.company} (${f.name})`,
+          subject: `Vidco 17020 Demo Talebi : ${f.company} - ${f.name}`,
           from_email: env.MAIL_FROM || 'noreply@racih.com',
           from_name: 'Vidco 17020 Web',
           to,
