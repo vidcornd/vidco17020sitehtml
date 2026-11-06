@@ -131,6 +131,15 @@ p { margin: 0; }
 }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 .lead { font-size: 19px; margin-top: 26px; max-width: 30em; }
+/* Marker-style emphasis for the two promises: the software and the team */
+.em {
+  color: var(--ink);
+  font-weight: 600;
+  background: linear-gradient(transparent 60%, rgba(244,115,42,.24) 60%, rgba(244,115,42,.24) 92%, transparent 92%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.accent { color: var(--plum); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
 
 .hero-film { margin: 0; }
