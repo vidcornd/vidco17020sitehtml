@@ -213,7 +213,7 @@ function confirmText(f) {
     `Beklemek istemezseniz WhatsApp'tan yazabilirsiniz: ${WHATSAPP}`,
     'ya da bizi arayabilirsiniz: +90 (216) 345 67 45',
     '',
-    `Bu arada müşterilerimizin Vidco deneyimini dinleyin: ${SITE}/#deneyimler`,
+    `Bu arada diğer müşterilerimizin Vidco deneyimlerini dinleyin: ${SITE}/#deneyimler`,
     '',
     'Vidco Yazılım Araştırma Geliştirme T.A.Ş.',
     'Suadiye Mah. Bağdat Cad. No:399/B Blok Kat:1 Kadıköy, İstanbul',
@@ -259,7 +259,7 @@ function confirmHtml(f) {
 
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:30px;border-top:1px solid #eeeaee;">
         <tr><td style="padding-top:22px;font-size:15px;line-height:1.6;color:#5d6270;">
-          Bu arada TÜV Austria Sıla, TCS, Inspecttest ve diğer müşterilerimizin Vidco deneyimini kendi sözleriyle dinleyin:<br>
+          Bu arada diğer müşterilerimizin Vidco deneyimlerini kendi sözleriyle dinleyin:<br>
           <a href="${SITE}/#deneyimler" style="color:#7d427c;font-weight:600;text-decoration:none;">Müşteri videolarını izleyin →</a>
         </td></tr>
       </table>
